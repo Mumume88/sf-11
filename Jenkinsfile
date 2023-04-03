@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone repository') {
             steps {
-                git branch: 'master', url: REPO_URL
+                git branch: 'main', url: REPO_URL
             }
         }
         stage('Download file') {
@@ -17,7 +17,7 @@ pipeline {
                 changeset "*/${FILE_PATH}"
             }
             steps {
-                sh "wget ${REPO_URL}/raw/master/${FILE_PATH}"
+                sh "wget ${REPO_URL}/raw/main/${FILE_PATH}"
             }
         }
         stage('Build and run container') {
