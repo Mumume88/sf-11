@@ -35,7 +35,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    def container = docker.run("my-image:${env.BUILD_ID}", '-p 9889:80')
+                    def container = docker.image("my-image:${env.BUILD_ID}")
                     sh "sleep 10s"
                     container.exec("v ${pwd}/${FILE_PATH}:/usr/share/nginx/html/${FILE_PATH}")
                     container.stop()
