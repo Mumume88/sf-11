@@ -35,7 +35,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    def container = docker.image("my-image:${env.BUILD_ID}").withRun('-p "9889:80"').with(groovy.lang.Closure)
+                    def container = docker.run("-d -p 9889:80 my-image:${env.BUILD_ID}-v${pwd}/${FILE_PATH}:/usr/share/nginx/html/${FILE_PATH}")
                 }
             }
         }
