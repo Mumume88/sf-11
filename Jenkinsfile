@@ -37,7 +37,7 @@ pipeline {
                 script {
                     def container = docker.run("my-image:${env.BUILD_ID}", '-p 9889:80')
                     sh "sleep 10s"
-                    container.exec("sed -i 's/Welcome to nginx!/Hello World!/g' /usr/share/nginx/html/index.html")
+                    container.exec("v ${pwd}/${FILE_PATH}:/usr/share/nginx/html/${FILE_PATH}")
                     container.stop()
                 }
             }
@@ -59,3 +59,9 @@ pipeline {
         }
     }
 } 
+post {
+    always {
+        docker.image("my-image":${env.BUILD_ID}").remove()
+                 }
+        }
+}
