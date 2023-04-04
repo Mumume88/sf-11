@@ -61,7 +61,7 @@ pipeline {
 } 
 post {
     always {
-        docker.image("my-image":${env.BUILD_ID}").remove()
+        docker.image("my-image:${env.BUILD_ID}").remove()
                  }
         }
 }
