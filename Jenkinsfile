@@ -37,7 +37,7 @@ pipeline {
         stage('Run container') {
             steps {
                 script {
-                    docker.image("${CONTAINER_NAME}")
+                    docker.image("${CONTAINER_NAME}")with.run("-d -p 9889:80")
                 }
             }
         }
