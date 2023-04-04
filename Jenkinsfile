@@ -1,8 +1,6 @@
 pipeline {
     agent any
     environment {
-        IMAGE_NAME = 'nginx'
-        CONTAINER_NAME = 'my-nginx'
         REPO_URL = 'https://github.com/Mumume88/sf-11.git'
         FILE_PATH = 'index.html'
     }
@@ -26,18 +24,21 @@ pipeline {
             }
         }
         
-       
-     stage('Build container') {
+        stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${IMAGE_NAME}")
+                    docker.build("my-image:${env.BUILD_ID}")
                 }
             }
         }
-        stage('Run container') {
+        
+        stage('Run Docker Container') {
             steps {
                 script {
-                   def container = docker.image('${CONTAINER_NAME}')with.run('-d -p 9889:80')
+                    def container = docker.run("my-image:${env.BUILD_ID}", '-p 9889:80')
+                    sh "sleep 10s"
+                    container.exec("sed -i 's/Welcome to nginx!/Hello World!/g' /usr/share/nginx/html/index.html")
+                    container.stop()
                 }
             }
         }
