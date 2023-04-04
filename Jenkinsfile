@@ -37,7 +37,6 @@ pipeline {
                 script {
                     def container = docker.image("my-image:${env.BUILD_ID}")
                     sh "sleep 10s"
-                    container.exec("v ${pwd}/${FILE_PATH}:/usr/share/nginx/html/${FILE_PATH}")
                     container.stop()
                 }
             }
