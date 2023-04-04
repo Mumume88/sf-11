@@ -20,11 +20,38 @@ pipeline {
                 sh "wget ${REPO_URL}/raw/main/${FILE_PATH}"
             }
         }
-        stage('Build and run container') {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Verify MD5') {
+            steps {
+                script {
+                    def filename = 'index.html'
+                    def expectedMd5 = sh(script: "md5sum ${filename} | awk '{ print \$1 }'", returnStdout: true).trim()
+                    def actualMd5 = sh(script: "curl -s http://localhost/${filename} | md5sum | awk '{ print \$1 }'", returnStdout: true).trim()
+                    
+                    if (expectedMd5 == actualMd5) {
+                        echo "MD5 checksums match"
+                    } else {
+                        error "MD5 checksums do not match"
+                    }
+                }
+            }
+        }
+     stage('Build container') {
             steps {
                 script {
                     docker.build("${IMAGE_NAME}")
-                    docker.run("-p 9889:80 --name ${CONTAINER_NAME} -v ${pwd}/${FILE_PATH}:/usr/share/nginx/html/${FILE_PATH}:ro ${IMAGE_NAME}")
+                }
+            }
+        }
+        stage('Run container') {
+            steps {
+                script {
+                    docker.run("-d -p 9889:80 --name ${CONTAINER_NAME} -v ${pwd}/${FILE_PATH}:/usr/share/nginx/html/${FILE_PATH}:ro ${IMAGE_NAME}")
                 }
             }
         }
