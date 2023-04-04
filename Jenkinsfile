@@ -37,7 +37,7 @@ pipeline {
         stage('Run container') {
             steps {
                 script {
-                    docker.image(my-nginx)with.run('-d -p 9889:80')
+                    docker.image('my-nginx')with.run('-d -p 9889:80')
                 }
             }
         }
