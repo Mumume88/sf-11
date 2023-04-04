@@ -35,7 +35,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    def container = docker.image("my-image:${env.BUILD_ID}").withRun('-p 9889:80')
+                    def container = docker.image("my-image:${env.BUILD_ID}").withRun('-p "9889:80"')
                 }
             }
         }
