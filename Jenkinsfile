@@ -37,7 +37,7 @@ pipeline {
         stage('Run container') {
             steps {
                 script {
-                    docker.run("-d -p 9889:80 --name ${CONTAINER_NAME} -v ${pwd}/${FILE_PATH}:/usr/share/nginx/html/${FILE_PATH}:ro ${IMAGE_NAME}")
+                    def container = docker.run("-d -p 9889:80 --name ${CONTAINER_NAME} -v ${pwd}/${FILE_PATH}:/usr/share/nginx/html/${FILE_PATH}:ro ${IMAGE_NAME}")
                 }
             }
         }
