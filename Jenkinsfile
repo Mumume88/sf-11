@@ -36,8 +36,6 @@ pipeline {
             steps {
                 script {
                     def container = docker.image("my-image:${env.BUILD_ID}")
-                    sh "sleep 10s"
-                    container.stop()
                 }
             }
         }
